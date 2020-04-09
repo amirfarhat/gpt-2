@@ -1,3 +1,6 @@
+# install requirements
+pip install -r requirements.txt
+
 # first, download the shakespeare dataset
 python download_dataset.py
 
