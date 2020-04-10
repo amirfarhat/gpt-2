@@ -30,6 +30,7 @@ def maketree(path):
 def train_main(dataset,
                model_name='117M',
                seed=None,
+               num_iters=10,
                batch_size=2,
                sample_length=1023,
                sample_num=1,
@@ -159,6 +160,9 @@ def train_main(dataset,
         avg_loss = (0.0, 0.0)
         start_time = time.time()
 
+        if num_iters:
+            num_iters = int(num_iters)
+
         try:
             while True:
 
@@ -169,6 +173,9 @@ def train_main(dataset,
                 avg_loss = (avg_loss[0] * 0.99 + lv, avg_loss[1] * 0.99 + 1.0)
 
                 if hvd.rank() == 0:
+                    if num_iters > 0 and counter >= num_iters:
+                        save()
+                        return
                     if counter % save_every == 0:
                         save()
                     if counter % sample_every == 0:
